@@ -10,7 +10,7 @@ var moment = require('moment-timezone');
 
 module.exports = function(app, passport) {
 
-    app.get('/', ensureHostname, function(req, res, next) {
+    app.get('/', function(req, res, next) {
         
         if (req.user) {
             res.redirect('/profile');
@@ -273,6 +273,20 @@ module.exports = function(app, passport) {
         // acknowledge the request
         res.set('Content-Type', 'text/plain');
         res.status(200).end();
+
+    });
+
+
+    app.get('/api/fitbit/notification', function(req, res, next) {
+            var verify = req.query.verify
+            console.log(verify);
+    if (verify == process.env.VERIFICATIONKEY) {
+	    res.status('204').end();
+	    } else {
+                    if (verify !== process.env.VERIFICATIONKEY) {
+			    res.status('404').end();
+                    }
+            }
 
     });
 
